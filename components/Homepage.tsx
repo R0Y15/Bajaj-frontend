@@ -20,22 +20,33 @@ const Homepage = () => {
         e.preventDefault();
         try {
             const payload = {
-                data: textInput,
-                filters: selectedOptions.map(option => option.value)
+                text: textInput
             };
 
-            // Make API call
-            const response = await axios.post('/api/your-endpoint', payload);
+            console.log('Submitting payload:', payload);
+
+            // Make API call to the backend
+            const response = await axios.post('https://bajaj-backend-1-1.onrender.com/bfhl', payload);
             setApiResponse(response.data); // Store the response data
 
-            console.log('Form submitted with:', { textInput, selectedOptions, apiResponse });
+            console.log('Response received:', response.data);
         } catch (error) {
             console.error('Error submitting form:', error);
+            // setApiResponse({ error: 'Failed to submit form' });
         }
     }
 
     const handleSelectChange = (selected: MultiValue<{ value: string; label: string }>) => {
         setSelectedOptions(selected)
+    }
+
+    const fetchHardcodedResponse = async () => {
+        try {
+            const response = await axios.get('https://bajaj-backend-1-1.onrender.com/bfhl');
+            setApiResponse(response.data);
+        } catch (error) {
+            console.error('Error fetching hardcoded response:', error);
+        }
     }
 
     return (
@@ -78,6 +89,7 @@ const Homepage = () => {
             <div className='mt-12 flex w-full'>
                 <Output response={apiResponse} />
             </div>
+
         </section>
     )
 }
